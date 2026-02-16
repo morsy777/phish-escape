@@ -10,9 +10,9 @@ public sealed class UserTestAttempt
     public DateTime StartedAt { get; set; } = DateTime.UtcNow;
     public DateTime? CompletedAt { get; set; }
 
-    public int Score { get; set; } = default!;
+    public int? Score { get; set; } = default!;
     public int TotalQuestions { get; set; } = default!;
-    public double Accuracy { get; set; } = default!;
+    public double? Accuracy { get; set; } = default!;
 
     public ICollection<UserTestAnswer> UserTestAnswers { get; set; } = [];
 }

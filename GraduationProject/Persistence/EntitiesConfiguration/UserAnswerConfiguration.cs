@@ -18,6 +18,14 @@ public class UserAnswerConfiguration
             .WithMany(a => a.UserAnswers)
             .HasForeignKey(x => x.AnswerId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .Property(x => x.AnsweredAt)
+            .HasDefaultValueSql("GETUTCDATE()");
+
+        builder.HasIndex(x => x.UserId);
+
+        builder.HasIndex(x => x.QuestionId);
     }
 }
 

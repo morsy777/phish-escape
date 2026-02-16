@@ -6,7 +6,7 @@ public sealed class UserStats
     public ApplicationUser User { get; set; } = null!;
 
     public int SecurityScore { get; set; } = default!;
-    public double GlobalRank { get; set; } = default!;
+    public double? GlobalRank { get; set; } = default!;
     public double DetectionAccuracy { get; set; } = default!;
 
     public DateTime CalculatedAt { get; set; } = DateTime.UtcNow;

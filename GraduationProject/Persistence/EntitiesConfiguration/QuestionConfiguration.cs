@@ -1,10 +1,20 @@
 ﻿
 namespace GraduationProject.Persistence.EntitiesConfiguration;
 
-public class QuestionConfiguration : IEntityTypeConfiguration<UserBadge>
+public class QuestionConfiguration : IEntityTypeConfiguration<Question>
 {
-    public void Configure(EntityTypeBuilder<UserBadge> builder)
+    public void Configure(EntityTypeBuilder<Question> builder)
     {
-        builder.HasKey(x => new { x.UserId, x.BadgeId });
+        builder.HasIndex(x => x.LessonId);
+
+        builder
+            .Property(x => x.QuestionText)
+            .IsRequired()
+            .HasColumnType("nvarchar(max)");
+
+        builder
+            .Property(x => x.ItemType)
+            .IsRequired()
+            .HasMaxLength(50);
     }
 }

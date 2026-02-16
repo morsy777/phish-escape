@@ -5,7 +5,7 @@ public sealed class Lesson
     public int LessonId { get; set; }
 
     public string Title { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
+    public string? Description { get; set; } = string.Empty;
     public string DifficultyLevel { get; set; } = string.Empty;
 
     public int OrderNumber { get; set; } = default!;
