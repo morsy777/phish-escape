@@ -16,6 +16,7 @@ public class LessonConfiguration : IEntityTypeConfiguration<Lesson>
 
         builder
             .Property(x => x.DifficultyLevel)
+            .HasConversion<string>()
             .IsRequired()
             .HasMaxLength(50);
 

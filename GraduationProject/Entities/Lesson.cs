@@ -6,7 +6,7 @@ public sealed class Lesson
 
     public string Title { get; set; } = string.Empty;
     public string? Description { get; set; } = string.Empty;
-    public string DifficultyLevel { get; set; } = string.Empty;
+    public DifficultyLevel DifficultyLevel { get; set; } = default!;
 
     public int OrderNumber { get; set; } = default!;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -8,13 +8,15 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
         builder.HasIndex(x => x.LessonId);
 
         builder
-            .Property(x => x.QuestionText)
+            .Property(x => x.QuestionContent)
             .IsRequired()
             .HasColumnType("nvarchar(max)");
 
         builder
-            .Property(x => x.ItemType)
+            .Property(x => x.QuestionType)
+            .HasConversion<string>()
             .IsRequired()
             .HasMaxLength(50);
+
     }
 }

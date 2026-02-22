@@ -1,7 +1,8 @@
-﻿using Hangfire;
+﻿using GraduationProject.Settings;
+using Hangfire;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Org.BouncyCastle.Tls;
-using GraduationProject.Settings;
+using System.Text.Json.Serialization;
 
 namespace GraduationProject;
 
@@ -41,11 +42,18 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAdminLessonService, AdminLessonService>();
 
         // Mail Settings
         services.AddScoped<IEmailSender, EmailService>();
         services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
         services.AddHttpContextAccessor();
+
+        // Exception Handler
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
+
+
 
         return services;
     }
@@ -54,6 +62,13 @@ public static class DependencyInjection
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        // Enum as string in swagger
+        services.Configure<JsonOptions>(options =>
+        {
+            options.JsonSerializerOptions.Converters
+                .Add(new JsonStringEnumConverter());
+        });
 
         return services;
     }

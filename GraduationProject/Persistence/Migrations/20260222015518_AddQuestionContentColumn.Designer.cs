@@ -4,6 +4,7 @@ using GraduationProject.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Template.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260222015518_AddQuestionContentColumn")]
+    partial class AddQuestionContentColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace Template.Persistence.Migrations
                     b.HasIndex("QuestionId", "AnswerText")
                         .IsUnique();
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.ApplicationUser", b =>
@@ -170,7 +173,7 @@ namespace Template.Persistence.Migrations
 
                     b.HasKey("BadgeId");
 
-                    b.ToTable("Badges", (string)null);
+                    b.ToTable("Badges");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.Lesson", b =>
@@ -210,7 +213,7 @@ namespace Template.Persistence.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.LessonScore", b =>
@@ -240,7 +243,7 @@ namespace Template.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("LessonScores", (string)null);
+                    b.ToTable("LessonScores");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.Question", b =>
@@ -274,7 +277,7 @@ namespace Template.Persistence.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.TestItem", b =>
@@ -305,7 +308,7 @@ namespace Template.Persistence.Migrations
                     b.HasIndex("OrderNumber")
                         .IsUnique();
 
-                    b.ToTable("TestItems", (string)null);
+                    b.ToTable("TestItems");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.TestItemAnswer", b =>
@@ -334,7 +337,7 @@ namespace Template.Persistence.Migrations
                     b.HasIndex("TestItemId", "AnswerText")
                         .IsUnique();
 
-                    b.ToTable("TestItemAnswers", (string)null);
+                    b.ToTable("TestItemAnswers");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.UserAccuracyHistory", b =>
@@ -361,7 +364,7 @@ namespace Template.Persistence.Migrations
                     b.HasIndex("UserId", "RecordDate")
                         .IsUnique();
 
-                    b.ToTable("UserAccuracyHistory", (string)null);
+                    b.ToTable("UserAccuracyHistory");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.UserAnswer", b =>
@@ -398,7 +401,7 @@ namespace Template.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAnswers", (string)null);
+                    b.ToTable("UserAnswers");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.UserBadge", b =>
@@ -418,7 +421,7 @@ namespace Template.Persistence.Migrations
 
                     b.HasIndex("BadgeId");
 
-                    b.ToTable("UserBadges", (string)null);
+                    b.ToTable("UserBadges");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.UserStats", b =>
@@ -446,7 +449,7 @@ namespace Template.Persistence.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserStats", (string)null);
+                    b.ToTable("UserStats");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.UserTestAnswer", b =>
@@ -482,7 +485,7 @@ namespace Template.Persistence.Migrations
 
                     b.HasIndex("UserTestAttemptId");
 
-                    b.ToTable("UserTestAnswers", (string)null);
+                    b.ToTable("UserTestAnswers");
                 });
 
             modelBuilder.Entity("GraduationProject.Entities.UserTestAttempt", b =>
@@ -517,7 +520,7 @@ namespace Template.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserTestAttempts", (string)null);
+                    b.ToTable("UserTestAttempts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
