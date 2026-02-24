@@ -30,6 +30,7 @@ global using GraduationProject.Authentication;
 global using GraduationProject.Abstractions.Consts;
 global using GraduationProject.Contracts.Authentication;
 global using GraduationProject.Contracts.User;
+global using GraduationProject.Contracts.Question;
 global using GraduationProject.Contracts.Lesson;
 global using GraduationProject.Entities;
 global using GraduationProject.Errors;

@@ -43,6 +43,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAdminLessonService, AdminLessonService>();
+        services.AddScoped<IAdminQuestionService, AdminQuestionService>();
 
         // Mail Settings
         services.AddScoped<IEmailSender, EmailService>();
