@@ -14,8 +14,9 @@ public class UserService(UserManager<ApplicationUser> userManager, IWebHostEnvir
             .ProjectToType<UserProfileResponse>()
             .SingleAsync();
 
-        var baseUrl = $"{request.Scheme}://{request.Host}";
-        user = user with { profileImage = $"{baseUrl}/me/get-profile-image" };
+        // return the path to end point get profile image
+        //var baseUrl = $"{request.Scheme}://{request.Host}";
+        //user = user with { profileImage = $"{baseUrl}/me/get-profile-image" };
 
         return Result.Success(user);
     }

@@ -44,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAdminLessonService, AdminLessonService>();
         services.AddScoped<IAdminQuestionService, AdminQuestionService>();
+        services.AddScoped<IUserManagementService, UserManagementService>();
 
         // Mail Settings
         services.AddScoped<IEmailSender, EmailService>();

@@ -1,6 +1,6 @@
 ﻿namespace GraduationProject.Controllers;
 
-[Route("meta")]
+[Route("api/meta")]
 [ApiController]
 public class MetaController : ControllerBase
 {

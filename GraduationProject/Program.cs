@@ -3,8 +3,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDependencies(builder.Configuration);
 
-
 var app = builder.Build();
+
+// Seeding Admin Role
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider
+        .GetRequiredService<RoleManager<IdentityRole>>();
+
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+}
 
 // Configure the HTTP request pipeline.
 

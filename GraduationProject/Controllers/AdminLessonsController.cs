@@ -1,6 +1,6 @@
 ﻿namespace GraduationProject.Controllers;
 
-[Route("admin/lessons")]
+[Route("api/admin/lessons")]
 [ApiController]
 //[Authorize(Roles = "Admin")]
 public class AdminLessonsController(IAdminLessonService adminLessonService) : ControllerBase
