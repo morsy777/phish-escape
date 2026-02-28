@@ -1,5 +1,6 @@
 ﻿using GraduationProject.Settings;
 using Hangfire;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Org.BouncyCastle.Tls;
 using System.Text.Json.Serialization;
@@ -54,6 +55,12 @@ public static class DependencyInjection
         // Exception Handler
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
+
+        // Solve upload img problem in server
+        services.Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = 5 * 1024 * 1024;
+        });
 
 
 

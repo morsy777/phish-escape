@@ -1,10 +1,12 @@
-﻿namespace GraduationProject.Authentication;
+﻿using System.Text.Json;
+
+namespace GraduationProject.Authentication;
 
 public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
     private readonly JwtOptions _options = options.Value;
 
-    public (string token, int expiresIn) GenerateToken(ApplicationUser user)
+    public (string token, int expiresIn) GenerateToken(ApplicationUser user, IEnumerable<string> roles)
     {
         Claim[] claims =
         {
@@ -12,7 +14,8 @@ public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             new Claim(JwtRegisteredClaimNames.Email, user.Email!),
             new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
             new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(nameof(roles), JsonSerializer.Serialize(roles), JsonClaimValueTypes.JsonArray)
         };
 
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));

@@ -2,7 +2,7 @@
 
 [Route("api/admin/users")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class UserManagementController(IUserManagementService userManagementService) : ControllerBase
 {
     private readonly IUserManagementService _userManagementService = userManagementService;

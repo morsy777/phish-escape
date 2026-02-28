@@ -2,7 +2,7 @@
 
 [Route("api/admin/lessons")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class AdminLessonsController(IAdminLessonService adminLessonService) : ControllerBase
 {
     private readonly IAdminLessonService _adminLessonService = adminLessonService;

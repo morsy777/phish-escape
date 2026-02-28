@@ -33,7 +33,7 @@ public class AuthService(UserManager<ApplicationUser> userManager,
         if (result.Succeeded)
         {
             // Generate JWT Token
-            var (token, expiresIn) = _jwtProvider.GenerateToken(user);
+            var (token, expiresIn) = _jwtProvider.GenerateToken(user, await GetUserRoles(user));
 
             // Call Refresh Token Genrator Function
             var refreshToken = GenerateRefreshToke();
@@ -87,7 +87,7 @@ public class AuthService(UserManager<ApplicationUser> userManager,
         userRefreshToken.RevokedOn = DateTime.UtcNow;
 
         // Generate New JWT Token
-        var (newToken, expiresIn) = _jwtProvider.GenerateToken(user);
+        var (newToken, expiresIn) = _jwtProvider.GenerateToken(user, await GetUserRoles(user));
 
         // Call Refresh Token Genrator Function to Generate New refresh token
         var newRefreshToken = GenerateRefreshToke();
@@ -357,4 +357,9 @@ public class AuthService(UserManager<ApplicationUser> userManager,
         await Task.CompletedTask;
     }
 
+
+    private async Task<IEnumerable<string>> GetUserRoles(ApplicationUser user)
+    {
+        return await _userManager.GetRolesAsync(user);
+    }
 }
