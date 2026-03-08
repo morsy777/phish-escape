@@ -8,7 +8,7 @@ public sealed class ApplicationUser : IdentityUser
 
     public int CurrentStreak { get; set; } = default!;
     public int MaxStreak { get; set; } = default!;
-    public string UserLevel { get; set; } = "Beginner";
+    public UserLevel UserLevel { get; set; } = UserLevel.Beginner;
 
     public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
 

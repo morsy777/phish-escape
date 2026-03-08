@@ -45,4 +45,12 @@ public class AccountController(IUserService userService) : ControllerBase
         return Ok(result.Value);
     }
 
+    [HttpPost("set-user-level")]
+    public async Task<IActionResult> SetUserLevel([FromBody] SetUserLevelRequest request)
+    {
+        await _userService.SetUserLevelAsync(User.GetUserId()!, request);
+
+        return NoContent();
+    }
+
 }

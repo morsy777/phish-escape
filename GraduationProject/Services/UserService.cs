@@ -1,5 +1,4 @@
-﻿
-namespace GraduationProject.Services;
+﻿namespace GraduationProject.Services;
 
 public class UserService(UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment) : IUserService
 {
@@ -81,5 +80,19 @@ public class UserService(UserManager<ApplicationUser> userManager, IWebHostEnvir
         );
 
         return Result.Success(response);
+    }
+
+    public async Task<Result> SetUserLevelAsync(string userId, SetUserLevelRequest request)
+    {
+        if (request.Level == UserLevel.Beginner)
+            return Result.Success();
+
+        await _userManager.Users
+            .Where(x => x.Id == userId)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(x => x.UserLevel, request.Level)
+            );
+
+        return Result.Success();
     }
 }

@@ -7,4 +7,5 @@ public interface IUserService
     Task<Result> ChangePasswordAsync(string userId, ChangePasswordRequest request);
     Task<Result> UploadProfileImage(string userId, IFormFile image);
     Task<Result<ProfileImageResponse>> GetProfileImage(string userId);
+    Task<Result> SetUserLevelAsync(string userId, SetUserLevelRequest request);
 }

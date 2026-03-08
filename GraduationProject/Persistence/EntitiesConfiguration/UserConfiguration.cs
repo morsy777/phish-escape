@@ -10,6 +10,11 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
             .WithOwner()
             .HasForeignKey("UserId");
 
+        builder
+            .Property(x => x.UserLevel)
+            .HasConversion<string>()
+            .IsRequired();
+
         builder.Property(x => x.FirstName).HasMaxLength(100);
         builder.Property(x => x.LastName).HasMaxLength(100);
     }

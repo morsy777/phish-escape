@@ -1,6 +1,6 @@
 ﻿namespace GraduationProject.Entities.Enums;
 
-public enum DifficultyLevel
+public enum UserLevel
 {
     Beginner = 1,
     Intermediate = 2,

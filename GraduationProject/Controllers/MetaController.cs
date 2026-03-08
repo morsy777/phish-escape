@@ -18,6 +18,20 @@ public class MetaController : ControllerBase
         return Ok(values);
     }
 
+    [HttpGet("user-levels")]
+    public IActionResult GetUserLevels()
+    {
+        var values = Enum.GetValues(typeof(UserLevel))
+            .Cast<UserLevel>()
+            .Select(e => new
+            {
+                id = (int)e,
+                name = e.ToString()
+            });
+
+        return Ok(values);
+    }
+
     [HttpGet("question-types")]
     public IActionResult GetQuestionTypes()
     {

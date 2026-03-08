@@ -23,4 +23,6 @@ public static class UserErrors
     public static readonly Error DuplicatedConfirmation =
         new Error("User.DuplicatedConfirmation", "The email already confrimed", StatusCodes.Status401Unauthorized);
 
+    public static readonly Error UserNotFound =
+        new Error("User.NotFound", "User not found", StatusCodes.Status404NotFound);
 }
