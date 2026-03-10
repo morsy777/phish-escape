@@ -4,5 +4,6 @@ public enum QuestionType
 {
     Email = 1,
     Link = 2,
-    FakePage = 3
+    FakePage = 3,
+    SMS = 4,
 }
