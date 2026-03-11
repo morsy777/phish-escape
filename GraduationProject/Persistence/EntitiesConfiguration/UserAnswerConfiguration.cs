@@ -26,6 +26,10 @@ public class UserAnswerConfiguration
         builder.HasIndex(x => x.UserId);
 
         builder.HasIndex(x => x.QuestionId);
+
+        builder
+            .HasIndex(x => new { x.UserId, x.QuestionId })
+            .IsUnique();
     }
 }
 

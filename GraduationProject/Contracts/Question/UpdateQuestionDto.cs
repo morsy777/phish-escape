@@ -5,6 +5,7 @@ public sealed class UpdateQuestionDto
     public string QuestionText { get; set; } = string.Empty;
 
     public string QuestionContent { get; set; } = string.Empty;
+    public string? Explanation { get; set; }
 
     public QuestionType QuestionType { get; set; }
 

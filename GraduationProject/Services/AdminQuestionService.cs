@@ -43,6 +43,7 @@ public sealed class AdminQuestionService(ApplicationDbContext context) : IAdminQ
 
         var question = dto.Adapt<Question>();
         question.LessonId = lessonId;
+        question.Explanation = dto.Explanation;
 
         _context.Questions.Add(question);
         await _context.SaveChangesAsync(cancellationToken);
@@ -81,6 +82,7 @@ public sealed class AdminQuestionService(ApplicationDbContext context) : IAdminQ
         question.QuestionText = dto.QuestionText;
         question.QuestionContent = dto.QuestionContent;
         question.QuestionType = dto.QuestionType;
+        question.Explanation = dto.Explanation;
 
         // existing answers in DB
         var existingAnswers = question.Answers.ToList();

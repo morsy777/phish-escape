@@ -17,6 +17,11 @@ public static class QuestionErrors
                   "Question must have at least two answers and exactly one correct answer",
                   StatusCodes.Status400BadRequest);
 
+    public static readonly Error AlreadyAnswered =
+    new Error("Question.AlreadyAnswered",
+              "Question already answerd, You can't answers the same question twice",
+              StatusCodes.Status400BadRequest);
+
     public static readonly Error InvalidAnswerReference =
         new Error("Question.InvalidAnswerReference",
               "One or more answer IDs don't belong to this question",

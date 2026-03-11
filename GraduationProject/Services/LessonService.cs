@@ -3,6 +3,7 @@
 public class LessonService(ApplicationDbContext context) : ILessonService
 {
     private readonly ApplicationDbContext _context = context;
+    private const int _unlockThreshold = 70;
 
     // This Helper method, don't use mapping
     public async Task<Result<List<Lesson>>> GetLessonsAsync(CancellationToken cancellationToken)
@@ -88,44 +89,32 @@ public class LessonService(ApplicationDbContext context) : ILessonService
         return Result.Success(result);
     }
 
-    public Result<List<LessonDto>> BuildLessonCards(List<Lesson> lessons,
+    public Result<List<LessonDto>> BuildLessonCards(
+        List<Lesson> lessons,
         Dictionary<int, int> questions,
         Dictionary<int, int> answers)
     {
-        var result = new List<LessonDto>();
+        var result = new List<LessonDto>(lessons.Count);
 
         for (int i = 0; i < lessons.Count; i++)
         {
             var lesson = lessons[i];
+            var lessonId = lesson.LessonId;
 
-            var total = questions.GetValueOrDefault(lesson.LessonId);
-            var answered = answers.GetValueOrDefault(lesson.LessonId);
+            var totalQuestions = questions.GetValueOrDefault(lessonId);
+            var answeredQuestions = answers.GetValueOrDefault(lessonId);
 
-            var progress = CalculateProgress(total, answered);
-
-            bool locked = false;
-
-            if (i > 0)
-            {
-                var prevLesson = lessons[i - 1];
-
-                var prevTotal = questions.GetValueOrDefault(prevLesson.LessonId);
-                var prevAnswered = answers.GetValueOrDefault(prevLesson.LessonId);
-
-                var prevProgress = CalculateProgress(prevTotal, prevAnswered);
-
-                locked = prevProgress < 70;
-            }
-
+            var progress = CalculateProgress(totalQuestions, answeredQuestions);
+            var locked = IsLessonLocked(i, lessons, questions, answers);
             var status = CalculateLessonStatus(progress, locked);
 
             result.Add(new LessonDto
             {
-                LessonId = lesson.LessonId,
+                LessonId = lessonId,
                 Title = lesson.Title,
                 Progress = progress,
                 Locked = locked,
-                Status = status,
+                Status = status
             });
         }
 
@@ -177,5 +166,22 @@ public class LessonService(ApplicationDbContext context) : ILessonService
             return "NotStarted";
 
         return "Completed";
+    }
+
+    private bool IsLessonLocked(int lessonIndex, List<Lesson> lessons,
+    Dictionary<int, int> questionsPerLesson,
+    Dictionary<int, int> answersPerLesson)
+    {
+        if (lessonIndex == 0)
+            return false;
+
+        var previousLesson = lessons[lessonIndex - 1];
+
+        var prevTotal = questionsPerLesson.GetValueOrDefault(previousLesson.LessonId);
+        var prevAnswered = answersPerLesson.GetValueOrDefault(previousLesson.LessonId);
+
+        var prevProgress = CalculateProgress(prevTotal, prevAnswered);
+
+        return prevProgress < _unlockThreshold;
     }
 }

@@ -36,6 +36,7 @@ global using GraduationProject.Contracts.UserManagement;
 global using GraduationProject.Contracts.DashboardStats;
 global using GraduationProject.Contracts.Dashboard; 
 global using GraduationProject.Contracts.CurriculumLesson;
+global using GraduationProject.Contracts.LessonEngine;
 global using GraduationProject.Entities;
 global using GraduationProject.Errors;
 global using GraduationProject.Extensions;

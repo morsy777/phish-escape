@@ -1,5 +1,4 @@
-﻿using GraduationProject.Entities.Enums;
-namespace GraduationProject.Entities;
+﻿namespace GraduationProject.Entities;
 
 public sealed class Question
 {
@@ -11,6 +10,7 @@ public sealed class Question
     public string QuestionText { get; set; } = string.Empty;
     public string QuestionContent { get; set; } = string.Empty;
     public QuestionType QuestionType { get; set; } = default!;
+    public string? Explanation { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

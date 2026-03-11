@@ -7,6 +7,11 @@ public static class LessonErrors
                   "Lesson not found",
                   StatusCodes.Status404NotFound);
 
+    public static readonly Error LessonCompleted =
+        new Error("Lesson.Completed",
+                  "This Lesson Completed",
+                  StatusCodes.Status404NotFound);
+
     public static readonly Error DuplicateTitle =
         new Error("Lesson.DuplicateTitle",
                   "Lesson title already exists",
