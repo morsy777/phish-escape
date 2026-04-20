@@ -10,8 +10,8 @@ public interface ILessonService
 
     Result<List<LessonDto>> BuildLessonCards(
         List<Lesson> lessons,
-        Dictionary<int, int> questions,
-        Dictionary<int, int> answers);
+        Dictionary<int, int> questionsPerEachLesson,
+        Dictionary<int, int> answersPerEachLesson);
 
     Task<Result<List<LessonDto>>> GetActiveLessonAsync(string userId, CancellationToken cancellationToken);
 }

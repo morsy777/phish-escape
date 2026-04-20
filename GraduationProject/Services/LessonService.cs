@@ -46,8 +46,7 @@ public class LessonService(ApplicationDbContext context) : ILessonService
         {
             LessonId = q.LessonId,
             QuestionsCount = q.Count,
-            AnswersCount = answers
-                .FirstOrDefault(a => a.LessonId == q.LessonId)?.Count ?? 0
+            AnswersCount = answers.FirstOrDefault(a => a.LessonId == q.LessonId)?.Count ?? 0
         }).ToList();
 
         return Result.Success(result);
@@ -91,8 +90,8 @@ public class LessonService(ApplicationDbContext context) : ILessonService
 
     public Result<List<LessonDto>> BuildLessonCards(
         List<Lesson> lessons,
-        Dictionary<int, int> questions,
-        Dictionary<int, int> answers)
+        Dictionary<int, int> questionsPerEachLesson,
+        Dictionary<int, int> answersPerEachLesson)
     {
         var result = new List<LessonDto>(lessons.Count);
 
@@ -101,11 +100,11 @@ public class LessonService(ApplicationDbContext context) : ILessonService
             var lesson = lessons[i];
             var lessonId = lesson.LessonId;
 
-            var totalQuestions = questions.GetValueOrDefault(lessonId);
-            var answeredQuestions = answers.GetValueOrDefault(lessonId);
+            var totalQuestions = questionsPerEachLesson.GetValueOrDefault(lessonId);
+            var answeredQuestions = answersPerEachLesson.GetValueOrDefault(lessonId);
 
             var progress = CalculateProgress(totalQuestions, answeredQuestions);
-            var locked = IsLessonLocked(i, lessons, questions, answers);
+            var locked = IsLessonLocked(i, lessons, questionsPerEachLesson, answersPerEachLesson);
             var status = CalculateLessonStatus(progress, locked);
 
             result.Add(new LessonDto
