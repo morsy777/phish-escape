@@ -21,4 +21,9 @@ public interface ILessonEngineService
         int lessonId,
         string userId,
         CancellationToken cancellationToken = default);
+
+    Task<Result> ResetLessonAsync(
+        int lessonId,
+        string userId,
+        CancellationToken cancellationToken = default);
 }

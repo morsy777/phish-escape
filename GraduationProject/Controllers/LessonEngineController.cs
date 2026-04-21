@@ -57,4 +57,17 @@ public class LessonEngineController(ILessonEngineService service) : ControllerBa
 
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
+
+    [HttpDelete("reset")]
+    public async Task<IActionResult> ResetLesson(
+    int lessonId,
+    CancellationToken cancellationToken)
+    {
+        var result = await _service.ResetLessonAsync(
+            lessonId,
+            User.GetUserId()!,
+            cancellationToken);
+
+        return result.IsSuccess ? Ok() : result.ToProblem();
+    }
 }

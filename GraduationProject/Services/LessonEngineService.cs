@@ -49,7 +49,8 @@ public sealed class LessonEngineService(ApplicationDbContext context)
             return Result.Failure<QuestionResponseDto>(LessonErrors.NotFound);
 
         var answeredQuestionIds = await _context.UserAnswers
-            .Where(x => x.UserId == userId)
+            .Where(x => x.UserId == userId &&
+                x.Question.LessonId == lessonId)
             .Select(x => x.QuestionId)
             .ToListAsync(cancellationToken);
 
@@ -108,23 +109,38 @@ public sealed class LessonEngineService(ApplicationDbContext context)
         if (answer is null)
             return Result.Failure<SubmitAnswerResponseDto>(QuestionErrors.InvalidAnswerReference);
 
+        // ✅ بيشوف لو السؤال ده اتجاوب قبل كده في نفس الـ attempt
+        var existingAnswer = await _context.UserAnswers
+            .FirstOrDefaultAsync(x =>
+                x.UserId == userId &&
+                x.QuestionId == request.QuestionId,
+                cancellationToken);
+
+        if (existingAnswer is not null)
+            return Result.Failure<SubmitAnswerResponseDto>(QuestionErrors.AlreadyAnswered);
+
+
         var userAnswer = new UserAnswer
         {
             UserId = userId,
             QuestionId = request.QuestionId,
             AnswerId = request.AnswerId,
-            IsCorrect = answer.IsCorrect
+            IsCorrect = answer.IsCorrect,
+            AnsweredAt = DateTime.UtcNow
         };
 
-        try
-        {
-            _context.UserAnswers.Add(userAnswer);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException)
-        {
-            return Result.Failure<SubmitAnswerResponseDto>(QuestionErrors.AlreadyAnswered);
-        }
+        //try
+        //{
+        //    _context.UserAnswers.Add(userAnswer);
+        //    await _context.SaveChangesAsync(cancellationToken);
+        //}
+        //catch (DbUpdateException)
+        //{
+        //    return Result.Failure<SubmitAnswerResponseDto>(QuestionErrors.AlreadyAnswered);
+        //}
+
+        _context.UserAnswers.Add(userAnswer);
+        await _context.SaveChangesAsync(cancellationToken);
 
         await UpdateUserStatsAsync(userId, cancellationToken);
 
@@ -153,15 +169,13 @@ public sealed class LessonEngineService(ApplicationDbContext context)
             .Where(x =>
                 x.UserId == userId &&
                 questionIds.Contains(x.QuestionId))
+            .GroupBy(x => x.QuestionId)
+            .Select(g => g.OrderByDescending(x => x.AnsweredAt).First())
             .ToListAsync(cancellationToken);
 
-        var correct = answers.Count(x => x.IsCorrect);
-
         var total = questionIds.Count;
-
-        var score = total == 0
-            ? 0
-            : (int)((double)correct / total * 100);
+        var correct = answers.Count(x => x.IsCorrect);
+        var score = total == 0 ? 0 : (int)((double)correct / total * 100);
 
         var result = new LessonResultDto
         {
@@ -175,23 +189,45 @@ public sealed class LessonEngineService(ApplicationDbContext context)
         return Result.Success(result);
     }
 
+    public async Task<Result> ResetLessonAsync(
+        int lessonId,
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        var lessonExists = await _context.Lessons
+            .AnyAsync(x => x.LessonId == lessonId, cancellationToken);
+
+        if (!lessonExists)
+            return Result.Failure(LessonErrors.NotFound);
+
+        await _context.UserAnswers
+            .Where(x =>
+                x.UserId == userId &&
+                x.Question.LessonId == lessonId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return Result.Success();
+    }
+
     private async Task UpdateUserStatsAsync(
         string userId,
         CancellationToken cancellationToken)
     {
-        var totalAnswers = await _context.UserAnswers
+        // query واحدة بتجيب Total و Correct في نفس الوقت
+        var stats = await _context.UserAnswers
             .Where(x => x.UserId == userId)
-            .CountAsync(cancellationToken);
+            .GroupBy(_ => 1)
+            .Select(g => new
+            {
+                Total = g.Count(),
+                Correct = g.Count(x => x.IsCorrect)
+            })
+            .FirstOrDefaultAsync(cancellationToken);
 
-        var correctAnswers = await _context.UserAnswers
-            .Where(x => x.UserId == userId && x.IsCorrect)
-            .CountAsync(cancellationToken);
-
-        if (totalAnswers == 0)
+        if (stats is null || stats.Total == 0)
             return;
 
-        var accuracy = (double)correctAnswers / totalAnswers * 100;
-
+        var accuracy = (double)stats.Correct / stats.Total * 100;
         var score = (int)Math.Round(accuracy);
 
         await _context.UserStats
@@ -200,7 +236,6 @@ public sealed class LessonEngineService(ApplicationDbContext context)
                 setters
                     .SetProperty(x => x.DetectionAccuracy, accuracy)
                     .SetProperty(x => x.SecurityScore, score),
-
                 cancellationToken
             );
     }
