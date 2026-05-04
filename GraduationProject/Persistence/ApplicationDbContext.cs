@@ -5,6 +5,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
+    // ADD inside your AppDbContext class — alongside existing DbSets
+    public DbSet<Conversation> Conversations => Set<Conversation>();
+    public DbSet<Message> Messages => Set<Message>();
+
     public DbSet<Lesson> Lessons { get; set; } = default!;
     public DbSet<Question> Questions { get; set; } = default!;
     public DbSet<Answer> Answers { get; set; } = default!;

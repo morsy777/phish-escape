@@ -51,6 +51,17 @@ public static class DependencyInjection
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<ILessonEngineService, LessonEngineService>();
 
+        // ── Chatbot Feature ────────────────────────────────────────────────────────
+        services.AddHttpClient<IExternalApiService, ExternalApiService>(client =>
+        {
+            client.BaseAddress = new Uri("https://amer003100-securitychatbot.hf.space");
+            client.Timeout = TimeSpan.FromSeconds(60);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+        });
+
+        services.AddScoped<IChatService, ChatService>();
+        // ── End Chatbot Feature ────────────────────────────────────────────────────
+
         // Mail Settings
         services.AddScoped<IEmailSender, EmailService>();
         services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
